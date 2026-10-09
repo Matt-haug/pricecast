@@ -47,6 +47,7 @@ docs = ["mkdocs>=1.5", "mkdocs-material>=9.0", "mkdocstrings[python]>=0.24"]
 dev = ["pricecast[entsoe,plot,test,docs]"]
 
 [project.urls]
+Documentation = "https://pricecast.readthedocs.io"
 Homepage = "https://github.com/Matt-haug/pricecast"
 Repository = "https://github.com/Matt-haug/pricecast"
 Issues = "https://github.com/Matt-haug/pricecast/issues"
