@@ -1,4 +1,7 @@
-<p align="center"><img src="assets/pricecast-lockup.svg" alt="pricecast" width="440"></p>
+<p align="center" markdown>
+![pricecast](assets/pricecast-lockup.svg#only-light){ width="440" }
+![pricecast](assets/pricecast-lockup-dark.svg#only-dark){ width="440" }
+</p>
 
 **Synthetic hourly electricity price years for prospective energy system studies.**
 
