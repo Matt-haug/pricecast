@@ -5,17 +5,29 @@ Notable changes to `pricecast`. This project follows
 
 ## [Unreleased]
 
+## [0.1.3] - 2026-10-09
+
+### Added
+- A logo: the duck curve - a day of electricity prices with an eye - on the
+  README, the documentation and the social preview (`docs/assets/`).
+- An API reference page in the documentation, generated from the docstrings.
+
+### Changed
+- The documentation is restyled to match the logo: Manrope for text, IBM Plex
+  Mono for code and titles, the package colour in moderation, a dark mode.
+- The PyPI page links the documentation.
+
+## [0.1.2] - 2026-10-09
+
+### Added
+- How to get an ENTSO-E token, in the README, the usage page and the
+  missing-token error.
+
 ### Changed
 - The version now comes from the git tag of each release (setuptools-scm).
 - The README and documentation are a user guide: what the package is for and
   how to use it, installed from PyPI.
 - Ward De Paepe and Francesco Contino added as authors.
-
-### Added
-- A logo: the duck curve - a day of electricity prices with an eye - on the
-  README, the documentation and the social preview (`docs/assets/`).
-- How to get an ENTSO-E token, in the README, the usage page and the
-  missing-token error.
 
 ## [0.1.0] - 2026-10-09
 
