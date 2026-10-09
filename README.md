@@ -1,10 +1,16 @@
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Matt-haug/pricecast/main/docs/assets/pricecast-lockup-dark.svg">
+    <img alt="pricecast" src="https://raw.githubusercontent.com/Matt-haug/pricecast/main/docs/assets/pricecast-lockup.svg" width="440">
+  </picture>
+</p>
+
 [![PyPI version](https://img.shields.io/pypi/v/pricecast?label=PyPI)](https://pypi.org/project/pricecast/)
 [![Documentation Status](https://img.shields.io/readthedocs/pricecast)](https://pricecast.readthedocs.io/en/latest/)
 [![Build Status](https://github.com/Matt-haug/pricecast/actions/workflows/tests.yml/badge.svg)](https://github.com/Matt-haug/pricecast/actions/workflows/tests.yml)
 [![License](https://img.shields.io/github/license/Matt-haug/pricecast)](https://github.com/Matt-haug/pricecast/blob/main/LICENSE)
 [![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.23264988-blue)](https://doi.org/10.5281/zenodo.23264988)
 
-# pricecast
 
 **Synthetic hourly electricity price years for prospective energy system studies.**
 

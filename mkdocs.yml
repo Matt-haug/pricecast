@@ -3,6 +3,8 @@ site_description: Synthetic hourly electricity price years for prospective energ
 repo_url: https://github.com/Matt-haug/pricecast
 theme:
   name: material
+  logo: assets/pricecast-icon.svg
+  favicon: assets/favicon.png
   features:
     - navigation.sections
     - content.code.copy

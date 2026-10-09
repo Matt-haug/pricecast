@@ -1,4 +1,4 @@
-# pricecast
+<p align="center"><img src="assets/pricecast-lockup.svg" alt="pricecast" width="440"></p>
 
 **Synthetic hourly electricity price years for prospective energy system studies.**
 

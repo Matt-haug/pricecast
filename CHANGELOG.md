@@ -12,6 +12,8 @@ Notable changes to `pricecast`. This project follows
 - Ward De Paepe and Francesco Contino added as authors.
 
 ### Added
+- A logo: the duck curve - a day of electricity prices with an eye - on the
+  README, the documentation and the social preview (`docs/assets/`).
 - How to get an ENTSO-E token, in the README, the usage page and the
   missing-token error.
 
