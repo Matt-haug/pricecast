@@ -1,139 +1,139 @@
-[![PyPI version](https://img.shields.io/pypi/v/pricecast)](https://pypi.org/project/pricecast/)
-[![Documentation Status](https://img.shields.io/readthedocs/loadcast)](https://pricecast.readthedocs.io/en/latest/)
+[![PyPI version](https://img.shields.io/pypi/v/pricecast?label=PyPI)](https://pypi.org/project/pricecast/)
+[![Documentation Status](https://img.shields.io/readthedocs/pricecast)](https://pricecast.readthedocs.io/en/latest/)
 [![Build Status](https://github.com/Matt-haug/pricecast/actions/workflows/tests.yml/badge.svg)](https://github.com/Matt-haug/pricecast/actions/workflows/tests.yml)
 [![License](https://img.shields.io/github/license/Matt-haug/pricecast)](https://github.com/Matt-haug/pricecast/blob/main/LICENSE)
-[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.23264989-blue)](https://doi.org/10.5281/zenodo.23264989)
+[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.23264988-blue)](https://doi.org/10.5281/zenodo.23264988)
 
 # pricecast
 
-**Synthetic hourly electricity price time-series for prospective energy system studies**
+**Synthetic hourly electricity price years for prospective energy system studies.**
+
+`pricecast` generates a full year of hourly day-ahead electricity prices from
+three drivers - load, solar and wind generation - with a regression fitted on
+recent market years. You give it the drivers of the year you want, it gives you
+8760 prices in EUR/MWh, ready to feed an LP or MILP design model.
+
+## What it is for
+
+You are sizing or operating something that buys or sells electricity by the
+hour - a heat pump with a thermal store, a battery, rooftop PV, an electrolyser
+- for a year that has not happened yet, and you need a price year to optimise
+against. The usual stand-in is a past year reused as it was, which carries the
+past's solar fleet, the past's price level and the past's weather.
+
+`pricecast` builds the year from what a scenario provides instead:
+
+- **installed solar and wind, and annual demand**, which set the shape of the
+  year - how deep prices fall at midday, how high they climb in the evening;
+- **a price level**, which you set from a fuel-and-carbon scenario or a market
+  study;
+- **one weather year**, which you also use for your asset's PV output and heat
+  demand, so that prices and demand respond to the same sun, wind and cold.
+
+It is **not a forecaster**. Nobody has next decade's hourly weather, so it does
+not predict the price of a given hour. It produces a plausible year for a
+scenario, and leaves the level to you.
+
+## Install
+
+```bash
+pip install pricecast
+pip install "pricecast[entsoe]"    # to download market data from ENTSO-E
+```
+
+Requires Python 3.9+, numpy and pandas. Downloading data needs a free ENTSO-E
+Transparency Platform token, passed as `token=` or set as the `ENTSOE_TOKEN`
+environment variable.
+
+## Quick start
 
 ```python
 import pricecast
 from pricecast.entsoe import fetch_year
 
-prices, drivers = fetch_year("BE", 2025)          # day-ahead price, load, solar, wind
-model = pricecast.load("BE")                      # or pricecast.fit(prices, drivers)
-
-future = pricecast.scale_drivers(drivers, solar=1.39, wind=1.38, load=1.30)
-year = model.predict(future)                      # the shape of a 2030 year
-year = pricecast.rescale_to_level(year, level=88) # its level, from a fuel-and-carbon scenario
+prices, drivers = fetch_year("BE", 2025)   # day-ahead price; load, solar, wind
+model = pricecast.load("BE")               # a shipped model: BE, DE, FR, ES, PL
+year = model.predict(drivers)              # an hourly price year, EUR/MWh
 ```
 
-Returns an hourly series of day-ahead prices in EUR/MWh, ready to feed an LP or
-MILP design model: a heat pump with storage, a battery, a thermal store, an
-electrolyser.
+Or fit your own, on any market with hourly prices and drivers:
 
-![The average day of 2025: the model keeps the duck curve that a reused year cannot know about](https://raw.githubusercontent.com/Matt-haug/pricecast/main/docs/figures/daily_shape_2025.png)
-
-*The average day of 2025, each series over its own annual mean. The model (fitted
-on 2023-24, driven by 2025's load, solar and wind) keeps the midday trough;
-reusing a past year cannot know about the panels installed since.*
-
-## Why
-
-A study that sizes equipment for 2030 needs a 2030 price year. The usual
-stand-in is a past year reused as it was, which carries the past's solar fleet,
-the past's price level, and the past's weather. `pricecast` instead generates the
-year from what a scenario *does* provide - installed solar and wind, demand and
-fuel prices - so the features a design reacts to follow the scenario:
-
-- how deep the price falls at midday, and how far it climbs in the evening;
-- what a solar kilowatt-hour is worth against the average one;
-- what the electricity for a kilowatt-hour of heat costs.
-
-The model is one least-squares regression of hourly price on the clock and on
-three drivers - load, solar and wind generation - fitted on recent years. A full
-year is generated in one shot, with no autoregression on the price.
-
-**It is not a forecaster.** Nobody has next decade's hourly solar output, so it
-does not compete with forecasting models. It produces a plausible *shape* and
-leaves the *level* to an outside scenario, because the level is set by fuel and
-carbon prices and cannot be extrapolated from price history.
-
-## What it has been tested on
-
-Five European markets (BE, DE, FR, ES, PL), fitted on 2023-24 and judged on 2025
-by what a design optimiser decides, not by hourly error:
-
-| | this model | last year's prices reused |
-|---|---|---|
-| daily storage, share of achievable arbitrage captured | 88% | 60% |
-| household with PV, battery and heat pump, share of savings captured | 93% | 82% |
-| sizing penalty with the price level given, data 1 / 2 / 4 / 6 years old (EUR/yr) | 2 / 29 / 16 / 7 | 8 / 94 / 147 / 198 |
-| midday price / annual mean, mean absolute error across countries | 0.09 | 0.11 |
-| solar value factor, mean absolute error | 0.07 | 0.11 |
-
-Full results, and where it falls short, are in the accompanying paper.
-
-## Building a future year
-
-The [recipe](docs/recipe.md), in short:
-
-1. **Fit** on the two most recent complete years, or start from `pricecast.load`.
-2. **Choose one weather year** and take every weather-dependent input from it:
-   the model's drivers, and your asset's PV output, heat demand and ambient
-   temperature. Prices respond to the same weather; mixing years makes heat
-   look 2-10% cheaper than it is.
-3. **Scale the drivers** by target-over-weather-year capacity and demand
-   (`scale_drivers`), from ERAA, TYNDP or national plans.
-4. **Run the model** (`PriceModel.predict`).
-5. **Set the level** as the market's recent ratio times a gas plant's running
-   cost in the target year (`level_ratio`, `gas_plant_cost`,
-   `rescale_to_level`). **Err low**: an overestimated level costs a design far
-   more than an underestimated one.
-6. **Check the reach** (`share_beyond_training`): where several percent of
-   hours lie beyond the net load the model was fitted on, floor the year at the
-   training years' 1% price quantile (`training_floor`).
-
-![2030 built from ERAA 2025 drivers and a gas-plant level, on 2025 weather](https://raw.githubusercontent.com/Matt-haug/pricecast/main/docs/figures/year_2030.png)
-
-*2030 from ERAA 2025 capacities and demand on 2025 weather. Germany and Poland
-(13% and 7% of hours beyond the training net load) need the floor.*
-
-## What it does not do
-
-- **Negative hours.** It smooths away part of the midday collapse in
-  solar-heavy markets: 1.8% negative hours against 5.7% in reality in 2025. The
-  residual noise (`noise=True`) restores the share, but in hours uncorrelated
-  with the real ones - use it for revenue estimates, never for sizing.
-- **Extrapolation.** It is linear in its drivers; far beyond them it must be
-  floored, and it has no storage driver, so future spreads are upper bounds.
-- **Drifting coefficients.** The price response to solar steepens as the fleet
-  grows. Correcting the coefficients for that was tested and does not pay;
-  refit on recent years instead.
-- **Other markets.** Day-ahead only - not intraday, balancing or forward.
-
-## Install
-
-```bash
-pip install git+https://github.com/Matt-haug/pricecast
-pip install "pricecast[entsoe] @ git+https://github.com/Matt-haug/pricecast"   # with ENTSO-E download
+```python
+model = pricecast.fit([prices_2024, prices_2025], [drivers_2024, drivers_2025])
+model.to_json("my_market.json")
 ```
 
-Requires Python 3.9+, numpy and pandas. Downloading data needs `entsoe-py` and a
-free ENTSO-E Transparency Platform token, passed as `token=` or set as the
-`ENTSOE_TOKEN` environment variable.
+## A year for a future target
+
+```python
+# 1. scale one weather year's drivers to the target year's fleet and demand
+future = pricecast.scale_drivers(drivers, solar=1.4, wind=1.4, load=1.3)
+
+# 2. generate the shape of the year
+year = model.predict(future)
+
+# 3. check how far the model is extrapolating, and floor the year if it is
+share = pricecast.share_beyond_training(future, training_drivers)   # % of hours
+floor = pricecast.training_floor(training_prices) if share > 1.0 else None
+
+# 4. set the level from your scenario
+year = pricecast.rescale_to_level(year, level=85.0, floor=floor)
+```
+
+The scaling factors and the level come from your scenario; the
+[recipe](https://pricecast.readthedocs.io/en/latest/recipe/) explains each step
+and where to find the inputs (ERAA, TYNDP, fuel and carbon prices).
+`pricecast.gas_plant_cost` and `pricecast.level_ratio` help build a level from
+fuel and carbon prices.
+
+## Good practice
+
+- **One weather year for everything.** Take the model's drivers and your
+  asset's PV output, heat demand and ambient temperature from the same year.
+- **Noise off for sizing.** `predict(..., noise=True)` adds a residual process
+  that restores price spikes and negative hours, but in hours that do not line
+  up with the real ones. Use it for revenue and risk estimates, not to size
+  equipment.
+- **Set the level from outside, and when unsure, err low.** A design sized on
+  too high a level overvalues flexibility.
+- **Watch the extrapolation.** The model is linear in its drivers. When a
+  scenario takes solar or wind far beyond the training years, check
+  `share_beyond_training`, floor the year with `training_floor`, and count how
+  many hours end up on the floor. When that becomes a large share, use the
+  scenario's own hourly prices instead.
+- **Day-ahead only** - not intraday, balancing or forward markets.
+
+## Documentation
+
+- [Usage](https://pricecast.readthedocs.io/en/latest/usage/): data formats,
+  fitting, generating, checking a year's structure.
+- [Recipe](https://pricecast.readthedocs.io/en/latest/recipe/): a future year
+  step by step, with sources for every input.
+- [Mathematics](https://pricecast.readthedocs.io/en/latest/mathematics/): the
+  model, the residual process, the level and the floor.
+- [`examples/`](examples/): a quick start and a complete future year.
 
 ## Data
 
 The shipped models are fitted on ENTSO-E Transparency Platform data for
 2024-2025: day-ahead prices, actual total load and actual generation per
-production type. What ships is the fitted coefficients only; the raw series are
-not redistributed and are downloaded with your own token.
+production type. Only the fitted coefficients ship; the raw series are
+downloaded with your own token.
+
+## Citing
+
+Use the "Cite this repository" button or [`CITATION.cff`](CITATION.cff). Every
+release is archived on Zenodo:
+[10.5281/zenodo.23264988](https://doi.org/10.5281/zenodo.23264988) always
+points to the latest version.
 
 ## Contributing
 
 Issues and pull requests are welcome - see [CONTRIBUTING.md](CONTRIBUTING.md).
-Reports that a generated year disagrees with a market you know well are
-especially welcome. This project follows the
+Reports of a generated year that disagrees with a market you know well are
+especially useful. This project follows the
 [Contributor Covenant](CODE_OF_CONDUCT.md). Generative AI was used in building
 it; see [AI_USAGE.md](AI_USAGE.md).
-
-## Citing
-
-Use the "Cite this repository" button, or `CITATION.cff`. Each release is
-archived on Zenodo with a DOI.
 
 ## Licence
 

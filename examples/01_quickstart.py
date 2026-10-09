@@ -1,6 +1,7 @@
 """Fit on two years, generate the next, and compare it with what happened.
 
-Needs entsoe-py and an ENTSO-E token in the ENTSOE_TOKEN environment variable.
+Needs `pip install "pricecast[entsoe]"` and an ENTSO-E token in the
+ENTSOE_TOKEN environment variable.
 """
 
 import pandas as pd

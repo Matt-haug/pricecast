@@ -10,7 +10,13 @@ time-zone-naive and read as UTC):
   `solar` and `wind`, in MW. Wind is onshore plus offshore.
 
 `pricecast.entsoe.fetch_year(country, year)` returns both for one calendar year,
-downloaded from the ENTSO-E Transparency Platform.
+downloaded from the ENTSO-E Transparency Platform. It needs the optional
+dependency and a free API token (as `token=` or the `ENTSOE_TOKEN` environment
+variable):
+
+```bash
+pip install "pricecast[entsoe]"
+```
 
 ## Fit, or start from a shipped model
 

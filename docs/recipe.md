@@ -23,10 +23,8 @@ The model's solar, wind and load shapes, **and** the asset's PV output, heat
 demand and the ambient temperature behind its heat-pump COP all come from the
 same weather year. Prices respond to the same weather: a sunny hour is cheap
 because it is sunny, a cold windless evening is dear because it is cold and
-windless. Pairing a price year with another year's heat demand made heat look
-2-10% cheaper in the five markets tested, and cut its correlation with price by
-0.03-0.12. (The solar value factor barely moves, because the clock and the
-season set most of it.)
+windless. Pairing a price year with another year's heat demand throws that
+covariance away and makes heat look cheaper than it is.
 
 ### 3. Scale the drivers
 
@@ -75,20 +73,18 @@ level = k * pricecast.gas_plant_cost(gas_2030, co2_2030)
 year = pricecast.rescale_to_level(year, level)
 ```
 
-In 2023-25 the ratio was 0.66-0.96 in Belgium, Germany, France and Spain and
-1.06-1.13 in Poland, where coal sets the price. Predicting 2025 from 2024's
-ratio and 2025's fuel and carbon prices missed by -9 to +3%; across the
-2021-23 regime changes it missed by up to 41%. The ratio is drifting down where
-solar and nuclear are growing, and an overestimated level makes flexibility look
-more valuable than it is - a 30% overestimate cost a household design about five
-times what a 30% underestimate did. **If in doubt, err low.**
+Use the ratio of a recent, stable year: it holds from one year to the next in
+calm markets and fails across regime changes such as the 2021-23 gas crisis. It
+is lower where nuclear or solar set many hours and above 1 where coal sets the
+price. An overestimated level makes flexibility look more valuable than it is,
+and costs a design more than an underestimate of the same size. **If in doubt,
+err low.**
 
-**Past about 2030 the anchor stops working.** As carbon climbs and gas plants
-run fewer hours, they set the price less often and the mean comes loose from
-their running cost: against the TYNDP 2026 market model, the anchor was 24-282%
-too high for 2035-2050 in the five countries tested. For those years take the
-level from a scenario's market model instead. TYNDP reports a load-weighted mean
-price per country and target year; match it as one:
+**For target years well beyond 2030, take the level from a scenario's market
+model instead.** As carbon prices climb and gas plants run fewer hours, they set
+the price less often, and the mean comes loose from their running cost. TYNDP
+reports a load-weighted mean price per country and target year; match it as
+one:
 
 ```python
 year = pricecast.rescale_to_level(model.predict(future), tyndp_level,
@@ -112,13 +108,12 @@ hours, use the year as is; at several percent, floor it, or choose a nearer
 target year. The model also has no storage driver, so the batteries a scenario
 expects will not compress its spreads: read future spreads as upper bounds.
 
-Also count the hours that end up **on the floor**. Built from TYNDP 2026 out to
-2050, the year's 90% price quantile stayed within 25% of the TYNDP market
-model's in 17 of 20 country-years, but by 2040 a quarter to half of the hours
-in Germany, France, Spain and Poland sat beyond the training net load and on
-the floor - far more than the market model, which builds batteries,
-electrolysers and demand response alongside the panels. While both shares stay
-at a few percent, use the year; past that, use the scenario's own hourly prices.
+Also count the hours that end up **on the floor**. A scenario that adds a lot
+of solar and wind also adds batteries, electrolysers and demand response, which
+lift the cheapest hours; the model has no driver for them, so it piles those
+hours on the floor instead. While both shares - hours beyond the training net
+load, hours on the floor - stay at a few percent, use the year; past that, use
+the scenario's own hourly prices.
 
 ## Where the inputs come from
 
@@ -134,6 +129,5 @@ at a few percent, use the year; past that, use the scenario's own hourly prices.
 If you do reuse a past price year, lay it on the target year so that both start
 at the same local hour (`pricecast.lay_on_calendar`). For Central European
 markets a calendar year opens at 23:00 UTC on 31 December. Laid on an index
-that starts at 00:00 UTC, every reused hour lands one hour late - an error that
-cost the reused year a fifth of its storage value in the paper's tests before it
-was caught.
+that starts at 00:00 UTC, every reused hour lands one hour late, which is
+enough to misplace every daily peak and trough a storage model trades on.

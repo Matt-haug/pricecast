@@ -9,16 +9,26 @@ abstract: >-
   five European bidding zones and the tools to build a future year: driver
   scaling, a gas-plant level anchor, an extrapolation check and a floor.
 type: software
-# Zenodo builds the record's author list from this file (or from .zenodo.json
-# if one is added), not from GitHub contributors: add co-authors here, each with
-# family-names, given-names, and optionally orcid and affiliation.
+# Zenodo builds the record's author list from this file, not from GitHub
+# contributors. CFF has one affiliation field per author, so several
+# affiliations go in one string, separated by semicolons.
 authors:
   - given-names: Mattéo
     family-names: Hauglustaine
     email: matteo.hauglustaine@uclouvain.be
-    affiliation: "UCLouvain"
+    affiliation: "UCLouvain; UMONS"
     orcid: "https://orcid.org/0009-0003-0990-3775"
+  - given-names: Ward
+    family-names: De Paepe
+    affiliation: "UMONS"
+    orcid: "https://orcid.org/0000-0001-5008-2946"
+  - given-names: Francesco
+    family-names: Contino
+    affiliation: "UCLouvain"
+    orcid: "https://orcid.org/0000-0002-8341-4350"
 version: 0.1.0
+doi: 10.5281/zenodo.23264988
+date-released: "2026-10-09"
 license: MIT
 repository-code: "https://github.com/Matt-haug/pricecast"
 keywords:

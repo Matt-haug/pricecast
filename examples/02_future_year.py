@@ -1,6 +1,7 @@
 """A 2030 price year for Belgium, following the recipe in docs/recipe.md.
 
-Needs entsoe-py and an ENTSO-E token in the ENTSOE_TOKEN environment variable.
+Needs `pip install "pricecast[entsoe]"` and an ENTSO-E token in the
+ENTSOE_TOKEN environment variable.
 Every scenario number below is quoted with its source; replace them with your
 own scenario.
 """

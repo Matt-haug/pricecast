@@ -39,6 +39,15 @@ markets is a small sample, and that is the package's main limitation.
 
 ## Making a change
 
+```bash
+git clone https://github.com/Matt-haug/pricecast
+cd pricecast
+python -m pip install -e ".[dev]"
+python -m pytest
+```
+
+Then:
+
 1. Fork, branch, and keep the change focused.
 2. Add a test. Tests here state something that must be true of the model -
    that a fit recovers known coefficients, that a rescaled year meets its level
