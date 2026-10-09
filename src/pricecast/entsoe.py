@@ -2,8 +2,10 @@
 
 Optional: needs `entsoe-py` (``pip install pricecast[entsoe]``) and a free API
 security token, read from the ``token`` argument or the ``ENTSOE_TOKEN``
-environment variable. Register on transparency.entsoe.eu and request the token
-in your account settings.
+environment variable. To get one, register on transparency.entsoe.eu, email
+transparency@entsoe.eu with "Restful API access" as the subject, then generate
+the token in your account settings; ENTSO-E's guide:
+https://transparencyplatform.zendesk.com/hc/en-us/articles/12845911031188-How-to-get-security-token
 
 What is fetched, as in the paper: the day-ahead price (EUR/MWh), actual total
 load (MW), and actual solar and wind generation (MW, onshore and offshore wind
@@ -38,7 +40,9 @@ def _client(token: str | None):
         raise ImportError("fetching needs entsoe-py: pip install pricecast[entsoe]") from exc
     key = token or os.environ.get("ENTSOE_TOKEN")
     if not key:
-        raise ValueError("no ENTSO-E token: pass token= or set ENTSOE_TOKEN")
+        raise ValueError(
+            "no ENTSO-E token: pass token= or set ENTSOE_TOKEN. To get one, see "
+            "https://transparencyplatform.zendesk.com/hc/en-us/articles/12845911031188-How-to-get-security-token")
     return EntsoePandasClient(api_key=key)
 
 

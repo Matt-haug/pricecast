@@ -41,9 +41,25 @@ pip install pricecast
 pip install "pricecast[entsoe]"    # to download market data from ENTSO-E
 ```
 
-Requires Python 3.9+, numpy and pandas. Downloading data needs a free ENTSO-E
-Transparency Platform token, passed as `token=` or set as the `ENTSOE_TOKEN`
-environment variable.
+Requires Python 3.9+, numpy and pandas.
+
+### Getting an ENTSO-E token
+
+Downloading market data needs a free security token from the ENTSO-E
+Transparency Platform. ENTSO-E's guide is
+[How to get security token?](https://transparencyplatform.zendesk.com/hc/en-us/articles/12845911031188-How-to-get-security-token); in short:
+
+1. Register an account on the [Transparency Platform](https://transparency.entsoe.eu/).
+2. Email [transparency@entsoe.eu](mailto:transparency@entsoe.eu) with
+   "Restful API access" as the subject and your registered email address in
+   the body.
+3. Once ENTSO-E has granted access, generate the
+   token in your account settings.
+4. Pass it as `token=`, or set it once as the `ENTSOE_TOKEN` environment
+   variable. Keep it out of version control.
+
+You only need a token to download data: the shipped models, `fit` on your own
+series and everything else work without one.
 
 ## Quick start
 
