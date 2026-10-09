@@ -1,10 +1,10 @@
 [build-system]
-requires = ["setuptools>=77", "wheel"]
+requires = ["setuptools>=77", "setuptools-scm>=8", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "pricecast"
-version = "0.1.0"
+dynamic = ["version"]
 description = "Synthetic hourly electricity price years for prospective energy system studies"
 readme = "README.md"
 requires-python = ">=3.9"
@@ -60,3 +60,8 @@ pricecast = ["data/*.json"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-q"
+
+[tool.setuptools_scm]
+# The version is the git tag of the release (v0.1.2 -> 0.1.2). A build with no
+# git history at all, such as an unpacked GitHub zip, falls back to this.
+fallback_version = "0.0.0"

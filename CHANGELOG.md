@@ -5,6 +5,16 @@ Notable changes to `pricecast`. This project follows
 
 ## [Unreleased]
 
+### Changed
+- The version now comes from the git tag of each release (setuptools-scm).
+- The README and documentation are a user guide: what the package is for and
+  how to use it, installed from PyPI.
+- Ward De Paepe and Francesco Contino added as authors.
+
+### Added
+- How to get an ENTSO-E token, in the README, the usage page and the
+  missing-token error.
+
 ## [0.1.0] - 2026-10-09
 
 First version, extracted from the research code behind the accompanying paper.

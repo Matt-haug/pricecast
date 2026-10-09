@@ -31,6 +31,9 @@ the range it was fitted on it must be floored (`share_beyond_training`).
 
 from __future__ import annotations
 
+from importlib.metadata import PackageNotFoundError
+from importlib.metadata import version as _version
+
 from .features import DEFAULT_FEATURES, DRIVERS, design_matrix
 from .model import PriceModel, fit, residual_noise
 from .pretrained import available, load
@@ -48,7 +51,10 @@ from .scenario import (
 )
 from .structure import METRICS, compare, lay_on_calendar, structure_metrics
 
-__version__ = "0.1.0"
+try:
+    __version__ = _version("pricecast")
+except PackageNotFoundError:  # a source tree that was never installed
+    __version__ = "0+unknown"
 
 __all__ = [
     "CCGT_EFFICIENCY", "DEFAULT_FEATURES", "DRIVERS", "GAS_EMISSION_FACTOR",
