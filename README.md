@@ -1,9 +1,11 @@
+[![PyPI version](https://img.shields.io/pypi/v/pricecast)](https://pypi.org/project/pricecast/)
+[![Documentation Status](https://img.shields.io/readthedocs/loadcast)](https://pricecast.readthedocs.io/en/latest/)
 [![Build Status](https://github.com/Matt-haug/pricecast/actions/workflows/tests.yml/badge.svg)](https://github.com/Matt-haug/pricecast/actions/workflows/tests.yml)
 [![License](https://img.shields.io/github/license/Matt-haug/pricecast)](https://github.com/Matt-haug/pricecast/blob/main/LICENSE)
 
 # pricecast
 
-**Synthetic hourly electricity price years for prospective energy system studies**
+**Synthetic hourly electricity price time-series for prospective energy system studies**
 
 ```python
 import pricecast
