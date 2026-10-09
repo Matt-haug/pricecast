@@ -1,0 +1,22 @@
+site_name: pricecast
+site_description: Synthetic hourly electricity price years for prospective energy system studies
+repo_url: https://github.com/Matt-haug/pricecast
+theme:
+  name: material
+  features:
+    - navigation.sections
+    - content.code.copy
+markdown_extensions:
+  - admonition
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - tables
+extra_javascript:
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+nav:
+  - Home: index.md
+  - Usage: usage.md
+  - Recipe: recipe.md
+  - Mathematics: mathematics.md

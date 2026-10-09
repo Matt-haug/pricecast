@@ -1,0 +1,30 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "pricecast: synthetic hourly electricity price years for prospective energy system studies"
+abstract: >-
+  Generates a full year of hourly day-ahead electricity prices in one shot from
+  load, solar and wind generation, by a regression fitted on recent years, as an
+  input to LP and MILP design studies. The shape of the year comes from the
+  model and its level from an outside fuel-and-carbon scenario. Ships models for
+  five European bidding zones and the tools to build a future year: driver
+  scaling, a gas-plant level anchor, an extrapolation check and a floor.
+type: software
+# Zenodo builds the record's author list from this file (or from .zenodo.json
+# if one is added), not from GitHub contributors: add co-authors here, each with
+# family-names, given-names, and optionally orcid and affiliation.
+authors:
+  - given-names: Mattéo
+    family-names: Hauglustaine
+    email: matteo.hauglustaine@uclouvain.be
+    affiliation: "UCLouvain"
+    orcid: "https://orcid.org/0009-0003-0990-3775"
+version: 0.1.0
+license: MIT
+repository-code: "https://github.com/Matt-haug/pricecast"
+keywords:
+  - electricity prices
+  - day-ahead market
+  - synthetic data
+  - energy system modelling
+  - techno-economic analysis
+  - duck curve

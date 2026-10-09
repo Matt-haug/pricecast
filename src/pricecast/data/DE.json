@@ -1,0 +1,60 @@
+{
+ "coefficients": {
+  "const": 7.19026510279194,
+  "hour_1": -1.20148543350422,
+  "hour_2": -2.767557895420281,
+  "hour_3": -3.169483224275901,
+  "hour_4": -0.14403996269299663,
+  "hour_5": 5.268354869113266,
+  "hour_6": 8.805548839332554,
+  "hour_7": 9.178618955644064,
+  "hour_8": 6.862625763288568,
+  "hour_9": 5.06106822195469,
+  "hour_10": 3.13431433336983,
+  "hour_11": 0.3874876888249261,
+  "hour_12": -0.3579715679936854,
+  "hour_13": 1.4653212233822654,
+  "hour_14": 4.1527596040978265,
+  "hour_15": 8.399679937223057,
+  "hour_16": 15.501495821102045,
+  "hour_17": 21.82537980978079,
+  "hour_18": 18.968835983927757,
+  "hour_19": 6.8344665793981125,
+  "hour_20": 1.06408943971504,
+  "hour_21": -0.26925928084918693,
+  "hour_22": 0.4301775232787318,
+  "hour_23": 0.9847530077836216,
+  "dow_0": 4.52046221906403,
+  "dow_1": 5.354188120736446,
+  "dow_2": 4.519355385955019,
+  "dow_3": 2.9186525163558947,
+  "dow_4": 3.1473642291647206,
+  "dow_5": 2.9664983842534376,
+  "load": 0.0022518423956802624,
+  "solar": -0.0027591543389505445,
+  "wind": -0.0023582761389554195,
+  "net_load_sq": 6.597765889182483e-09
+ },
+ "residual_std": 28.829962242404854,
+ "student_df": 4.2,
+ "features": {
+  "hour_dummies": true,
+  "weekday_dummies": true,
+  "net_load_curvature": true,
+  "driver_lags": [],
+  "timezone": "UTC"
+ },
+ "metadata": {
+  "country": "DE",
+  "bidding_zone": "DE_LU",
+  "train_years": [
+   2024,
+   2025
+  ],
+  "hours": 17544,
+  "source": "ENTSO-E Transparency Platform: day-ahead prices, actual total load, actual generation per production type (solar; wind onshore + offshore), hourly means",
+  "fitted": "2026-10-09",
+  "pricecast_version": "0.1.0",
+  "r2_in_sample": 0.7006
+ }
+}
