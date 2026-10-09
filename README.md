@@ -2,6 +2,7 @@
 [![Documentation Status](https://img.shields.io/readthedocs/loadcast)](https://pricecast.readthedocs.io/en/latest/)
 [![Build Status](https://github.com/Matt-haug/pricecast/actions/workflows/tests.yml/badge.svg)](https://github.com/Matt-haug/pricecast/actions/workflows/tests.yml)
 [![License](https://img.shields.io/github/license/Matt-haug/pricecast)](https://github.com/Matt-haug/pricecast/blob/main/LICENSE)
+[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.23264989-blue)](https://doi.org/10.5281/zenodo.23264989)
 
 # pricecast
 
