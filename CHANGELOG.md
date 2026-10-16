@@ -3,7 +3,7 @@
 Notable changes to `pricecast`. This project follows
 [semantic versioning](https://semver.org/).
 
-## [Unreleased]
+## [0.1.5] - 2026-10-16
 
 ### Changed
 - The documentation presents the package as a parametric price model, for
@@ -27,9 +27,12 @@ Notable changes to `pricecast`. This project follows
 - `examples/03_uncertainty.py`: 32 price years for Belgium in 2035, sampled over
   TYNDP 2026's build-out timing, demand and price-level ranges.
 
+## [0.1.4] - 2026-10-09
+
 ### Fixed
 - PyPI listed the co-authors as the authors and the first author only as
   an email; all three are now authors, with a maintainer contact.
+- The first author's name is spelled Mattéo, as in `CITATION.cff` and ORCID.
 
 ## [0.1.3] - 2026-10-09
 
