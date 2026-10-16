@@ -12,33 +12,47 @@
 [![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.23264988-blue)](https://doi.org/10.5281/zenodo.23264988)
 
 
-**Synthetic hourly electricity price years for prospective energy system studies.**
+**A parametric model of hourly electricity prices, for scenario sweeps,
+uncertainty propagation and future years.**
 
-`pricecast` generates a full year of hourly day-ahead electricity prices from
-three drivers - load, solar and wind generation - with a regression fitted on
-recent market years. You give it the drivers of the year you want, it gives you
-8760 prices in EUR/MWh, ready to feed an LP or MILP design model.
+`pricecast` turns three hourly drivers - load, solar and wind generation - into
+a full year of hourly day-ahead prices: 8760 values in EUR/MWh, generated in one
+shot and ready to feed an LP or MILP design model. The model is a regression
+fitted on market years, so it responds to its drivers as real prices have: more
+solar lowers the price in the hours when the sun shines, more wind in the windy
+hours, more demand in every hour.
 
 ## What it is for
 
-You are sizing or operating something that buys or sells electricity by the
-hour - a heat pump with a thermal store, a battery, rooftop PV, an electrolyser
-- for a year that has not happened yet, and you need a price year to optimise
-against. The usual stand-in is a past year reused as it was, which carries the
-past's solar fleet, the past's price level and the past's weather.
+Use it when a design study needs hourly prices for a year that has not
+happened, or for many such years. You are sizing or operating something that
+buys or sells electricity by the hour - a heat pump with a thermal store, a
+battery, rooftop PV, an electrolyser. The usual stand-in is a past price year
+reused as it was, which carries the past's solar fleet, price level and
+weather, and the whole study then rests on that one year.
 
-`pricecast` builds the year from what a scenario provides instead:
+Because the model is parametric in its drivers, it does three things a reused
+year cannot:
 
-- **installed solar and wind, and annual demand**, which set the shape of the
-  year - how deep prices fall at midday, how high they climb in the evening;
-- **a price level**, which you set from a fuel-and-carbon scenario or a market
-  study;
-- **one weather year**, which you also use for your asset's PV output and heat
-  demand, so that prices and demand respond to the same sun, wind and cold.
+- **Sweep a scenario.** Change one driver at a time - double the solar fleet,
+  grow demand by a third - and read what happens to the midday trough, the
+  evening ramp and the value of a solar kilowatt-hour. Rescaling a past year
+  moves its level or stretches its spread, but every hour keeps its rank;
+  scaling the drivers changes *which* hours are cheap.
+- **Propagate uncertainty.** A price year takes a fraction of a second, so
+  hundreds of them, one per sampled scenario, take seconds. A market model needs
+  a full simulation for each.
+- **Build a future year from a market-model scenario.** A scenario such as
+  ENTSO-E's TYNDP 2026 supplies the fleet, the demand and the price level; the
+  model supplies the hourly shape that follows from them. Where the scenario
+  publishes its hourly results, fit the model on them, and it becomes a cheap
+  stand-in for the market model around that scenario.
 
-It is **not a forecaster**. Nobody has next decade's hourly weather, so it does
-not predict the price of a given hour. It produces a plausible year for a
-scenario, and leaves the level to you.
+It is **not a forecaster**, and not a market model. Nobody has next decade's
+hourly weather, so it does not predict the price of a given hour; and it does
+not dispatch storage or demand response. The scenario carries those, through
+its price level and, when the model is fitted on its hourly results, through
+the coefficients.
 
 ## Install
 
@@ -85,44 +99,81 @@ model = pricecast.fit([prices_2024, prices_2025], [drivers_2024, drivers_2025])
 model.to_json("my_market.json")
 ```
 
-## A year for a future target
+## A future year from TYNDP
+
+The scenario gives the target year's fleet, demand and price level; the model
+gives the shape. With Belgium's 2030 figures from TYNDP 2026 (central scenario,
+National Trends+):
 
 ```python
-# 1. scale one weather year's drivers to the target year's fleet and demand
-future = pricecast.scale_drivers(drivers, solar=1.4, wind=1.4, load=1.3)
+import pandas as pd
 
-# 2. generate the shape of the year
-year = model.predict(future)
+(p24, d24), (p25, d25) = fetch_year("BE", 2024), fetch_year("BE", 2025)
 
-# 3. check how far the model is extrapolating, and floor the year if it is
-share = pricecast.share_beyond_training(future, training_drivers)   # % of hours
-floor = pricecast.training_floor(training_prices) if share > 1.0 else None
+# 1. scale the 2025 weather year to TYNDP's 2030 fleet (GW) and demand (TWh)
+solar_2025 = pricecast.mid_year_capacity(10.70, later=15.64, years_between=5)
+wind_2025 = pricecast.mid_year_capacity(5.44, later=7.84, years_between=5)
+future = pricecast.scale_drivers(d25, solar=15.64 / solar_2025, wind=7.84 / wind_2025,
+                                 load=110.7e6 / d25["load"].sum())
 
-# 4. set the level from your scenario
-year = pricecast.rescale_to_level(year, level=85.0, floor=floor)
+# 2. generate the shape, floor it, and give it TYNDP's load-weighted mean price
+floor = pricecast.training_floor(pd.concat([p24, p25]))
+year = pricecast.rescale_to_level(model.predict(future), level=65.1, floor=floor,
+                                  weights=future["load"])
+
+# 3. check how far the model reaches: % of hours beyond its training net load
+pricecast.share_beyond_training(future, pd.concat([d24, d25]))
 ```
 
-The scaling factors and the level come from your scenario; the
-[recipe](https://pricecast.readthedocs.io/en/latest/recipe/) explains each step
-and where to find the inputs (ERAA, TYNDP, fuel and carbon prices).
-`pricecast.gas_plant_cost` and `pricecast.level_ratio` help build a level from
-fuel and carbon prices.
+The [recipe](https://pricecast.readthedocs.io/en/latest/recipe/) explains each
+step and where every number comes from. For a target year beyond the model's
+reach, or to carry TYNDP's storage and demand response into the shape, fit the
+model on TYNDP's own hourly results (recipe, step 1).
+
+## Sweeps and uncertainty
+
+Each price year costs a matrix product, so a scenario's uncertainty can be
+sampled rather than argued. For Belgium in 2035 - the solar and wind build-out
+five years early or late, demand and price level between TYNDP's lower- and
+higher-growth variants:
+
+```python
+import numpy as np
+
+rng = np.random.default_rng(1)
+years = []
+for solar, wind, demand, level in rng.uniform([15.6, 7.8, 122.7, 38.0],
+                                              [29.5, 17.6, 145.3, 109.3], size=(200, 4)):
+    future = pricecast.scale_drivers(d25, solar=solar / solar_2025, wind=wind / wind_2025,
+                                     load=demand * 1e6 / d25["load"].sum())
+    years.append(pricecast.rescale_to_level(model.predict(future), level, floor=floor,
+                                            weights=future["load"]))
+```
+
+Feed each year to your design model, and fit a polynomial chaos expansion to
+its outputs to rank the inputs; the
+[uncertainty page](https://pricecast.readthedocs.io/en/latest/uncertainty/)
+shows how, and what to check before reading the result.
 
 ## Good practice
 
 - **One weather year for everything.** Take the model's drivers and your
-  asset's PV output, heat demand and ambient temperature from the same year.
+  asset's PV output, heat demand and ambient temperature from the same year, so
+  that prices and demand respond to the same sun, wind and cold.
 - **Noise off for sizing.** `predict(..., noise=True)` adds a residual process
   that restores price spikes and negative hours, but in hours that do not line
   up with the real ones. Use it for revenue and risk estimates, not to size
   equipment.
-- **Set the level from outside, and when unsure, err low.** A design sized on
-  too high a level overvalues flexibility.
-- **Watch the extrapolation.** The model is linear in its drivers. When a
-  scenario takes solar or wind far beyond the training years, check
-  `share_beyond_training`, floor the year with `training_floor`, and count how
-  many hours end up on the floor. When that becomes a large share, use the
-  scenario's own hourly prices instead.
+- **Take the level from the scenario, and when unsure, err low.** Match it as a
+  load-weighted mean (`weights=`), as TYNDP reports it. A design sized on too
+  high a level overvalues flexibility.
+- **Watch the reach.** The model is linear in its drivers. Count the hours
+  beyond its training net load (`share_beyond_training`) and the hours left on
+  the floor after rescaling. While both stay at a few percent, use the year;
+  past that, use the scenario's own hourly prices.
+- **Read spreads as upper bounds** when the model is fitted on market years: it
+  holds storage and demand response at their training-year level, while a
+  scenario adds both. Fitted on the scenario's hourly results, it carries them.
 - **Day-ahead only** - not intraday, balancing or forward markets.
 
 ## Documentation
@@ -130,17 +181,21 @@ fuel and carbon prices.
 - [Usage](https://pricecast.readthedocs.io/en/latest/usage/): data formats,
   fitting, generating, checking a year's structure.
 - [Recipe](https://pricecast.readthedocs.io/en/latest/recipe/): a future year
-  step by step, with sources for every input.
+  from TYNDP step by step, with sources for every input.
+- [Sweeps and uncertainty](https://pricecast.readthedocs.io/en/latest/uncertainty/):
+  one driver at a time, sampled scenarios, and sensitivity indices.
 - [Mathematics](https://pricecast.readthedocs.io/en/latest/mathematics/): the
-  model, the residual process, the level and the floor.
-- [`examples/`](examples/): a quick start and a complete future year.
+  model, the residual process, the level, the floor and the reach.
+- [`examples/`](examples/): a quick start, a future year and a sampled scenario.
 
 ## Data
 
 The shipped models are fitted on ENTSO-E Transparency Platform data for
 2024-2025: day-ahead prices, actual total load and actual generation per
 production type. Only the fitted coefficients ship; the raw series are
-downloaded with your own token.
+downloaded with your own token. The scenario figures quoted in the examples come
+from the [TYNDP 2026 scenarios](https://2026.entsos-tyndp-scenarios.eu/) of
+ENTSO-E and ENTSOG.
 
 ## Citing
 

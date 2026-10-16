@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "pricecast"
 dynamic = ["version"]
-description = "Synthetic hourly electricity price years for prospective energy system studies"
+description = "A parametric model of hourly electricity prices, for scenario sweeps, uncertainty propagation and future years"
 readme = "README.md"
 requires-python = ">=3.9"
 license = "MIT"
@@ -28,6 +28,9 @@ keywords = [
     "techno-economic analysis",
     "duck curve",
     "time series",
+    "scenario analysis",
+    "uncertainty propagation",
+    "TYNDP",
 ]
 classifiers = [
     "Development Status :: 4 - Beta",

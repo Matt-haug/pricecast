@@ -5,6 +5,28 @@ Notable changes to `pricecast`. This project follows
 
 ## [Unreleased]
 
+### Changed
+- The documentation presents the package as a parametric price model, for
+  scenario sweeps, uncertainty propagation and future years built from a
+  market-model scenario. Future years now come from ENTSO-E's TYNDP 2026
+  throughout: fleet, demand and load-weighted price level from its KPI
+  dashboard, and, where its hourly results are at hand, the coefficients fitted
+  on them, with scarcity hours left out of the fit and of the level.
+- `examples/02_future_year.py` builds Belgium's 2030 year from TYNDP 2026
+  instead of ERAA 2025 and a gas-plant level, and checks it against TYNDP's 10%
+  and 90% price quantiles.
+- The recipe always floors the year before matching the level, and reports a
+  second reach count: the share of hours left on the floor.
+- `gas_plant_cost` and `level_ratio` are documented as a near-term tool only;
+  their behaviour is unchanged.
+
+### Added
+- A documentation page on sweeps and uncertainty propagation: one driver at a
+  time, sampled scenario inputs, and polynomial chaos expansions with their
+  leave-one-out check.
+- `examples/03_uncertainty.py`: 32 price years for Belgium in 2035, sampled over
+  TYNDP 2026's build-out timing, demand and price-level ranges.
+
 ### Fixed
 - PyPI listed the co-authors as the authors and the first author only as
   an email; all three are now authors, with a maintainer contact.

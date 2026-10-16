@@ -1,28 +1,32 @@
-"""pricecast -- synthetic hourly electricity price years for prospective studies.
+"""pricecast -- a parametric model of hourly electricity prices.
 
 A full year of hourly day-ahead prices, generated in one shot from three
 physical drivers -- load, solar and wind generation -- by a regression fitted
-on recent years. It is built to be an *input* to LP and MILP design studies
-(heat pumps, batteries, thermal stores, electrolysers), not to forecast
-tomorrow's price.
+on market years or on a scenario's hourly results. It is built to be an *input*
+to LP and MILP design studies (heat pumps, batteries, thermal stores,
+electrolysers), not to forecast tomorrow's price.
 
     import pricecast
 
     model = pricecast.fit(prices, drivers)            # or pricecast.load("BE")
     year = model.predict(future_drivers)              # the shape of the year
-    year = pricecast.rescale_to_level(year, level=80) # the level, from outside
+    year = pricecast.rescale_to_level(year, level=80) # the level, from a scenario
 
 What it is for
 --------------
 Because the price is driven by physical quantities, a scenario can be posed
 directly: double the solar fleet, grow the demand, and read off what happens to
 the *shape* of the price year -- the midday trough, the evening ramp, the value
-of a solar kilowatt-hour. The level of the year is set from outside, from a
-fuel-and-carbon scenario, because it cannot be extrapolated from price history.
+of a solar kilowatt-hour. Each year takes a fraction of a second, so a scenario
+can be swept one driver at a time, or its uncertain inputs sampled and carried
+through to a design. For a future year, a market-model scenario such as TYNDP
+2026 supplies the drivers and the level, and its hourly results can serve as the
+training data.
 
 What it is not
 --------------
 Not a forecaster: there are no future solar and wind series to forecast from.
+Not a market model: it does not dispatch storage or demand response.
 It smooths away part of the midday price collapse in solar-heavy markets and
 produces too few negative hours unless its residual noise is switched on --
 which should stay off for sizing. It is linear in its drivers, so far outside

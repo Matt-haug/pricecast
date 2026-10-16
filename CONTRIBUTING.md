@@ -21,8 +21,8 @@ silence:
 
 - **Forecasting.** No next-day or next-week price forecasts, and no models whose
   inputs are only known in hindsight.
-- **Forecasting the level.** The price level comes from an outside
-  fuel-and-carbon scenario. Tools to *apply* one belong here; a model that
+- **Forecasting the level.** The price level comes from an outside scenario,
+  such as a market model's. Tools to *apply* one belong here; a model that
   extrapolates the level from price history does not.
 - **Dispatch or sizing models.** The package produces prices; what you design
   with them is your study.

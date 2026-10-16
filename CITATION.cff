@@ -1,13 +1,17 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
-title: "pricecast: synthetic hourly electricity price years for prospective energy system studies"
+title: "pricecast: a parametric model of hourly electricity prices for prospective energy system studies"
 abstract: >-
   Generates a full year of hourly day-ahead electricity prices in one shot from
-  load, solar and wind generation, by a regression fitted on recent years, as an
-  input to LP and MILP design studies. The shape of the year comes from the
-  model and its level from an outside fuel-and-carbon scenario. Ships models for
-  five European bidding zones and the tools to build a future year: driver
-  scaling, a gas-plant level anchor, an extrapolation check and a floor.
+  load, solar and wind generation, by a regression fitted on market years or on
+  a scenario's hourly results, as an input to LP and MILP design studies.
+  Because the model is parametric in its drivers and each year takes a fraction
+  of a second, a scenario can be swept one driver at a time or its uncertain
+  inputs sampled and propagated to a design. For a future year, a market-model
+  scenario such as ENTSO-E's TYNDP 2026 supplies the drivers and the price
+  level, and the model supplies the hourly shape. Ships models for five
+  European bidding zones and the tools to build a future year: driver scaling,
+  level matching with a floor, and two checks of the model's reach.
 type: software
 # Zenodo builds the record's author list from this file, not from GitHub
 # contributors. CFF has one affiliation field per author, so several

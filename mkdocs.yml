@@ -1,5 +1,5 @@
 site_name: pricecast
-site_description: Synthetic hourly electricity price years for prospective energy system studies
+site_description: A parametric model of hourly electricity prices, for scenario sweeps, uncertainty propagation and future years
 repo_url: https://github.com/Matt-haug/pricecast
 theme:
   name: material
@@ -63,5 +63,6 @@ nav:
   - Home: index.md
   - Usage: usage.md
   - Recipe: recipe.md
+  - Sweeps and uncertainty: uncertainty.md
   - Mathematics: mathematics.md
   - API reference: api.md

@@ -2,14 +2,20 @@
 
 The recipe (see docs/recipe.md):
 
-1. fit on the two most recent complete years;
+1. fit on the two most recent complete years, or on the scenario's own hourly
+   results where it publishes them (TYNDP 2026 does);
 2. take every weather-dependent input from one weather year;
-3. scale that year's drivers to the target year (`scale_drivers`);
+3. scale that year's drivers to the target year's fleet and demand
+   (`scale_drivers`, `mid_year_capacity`);
 4. run the model;
-5. set the level from a fuel-and-carbon scenario (`gas_plant_cost`,
-   `level_ratio`) and rescale to it (`rescale_to_level`), erring low;
-6. check how far the model is extrapolating (`share_beyond_training`) and floor
-   the year if it is far (`training_floor`).
+5. floor the year at the training prices' low quantile (`training_floor`) and
+   rescale it to the scenario's load-weighted mean price (`rescale_to_level`),
+   erring low;
+6. check how far the model reaches (`share_beyond_training`, and the share of
+   hours left on the floor).
+
+`gas_plant_cost` and `level_ratio` build a level from gas and carbon prices: a
+near-term tool, which overshoots market-model prices after 2030.
 """
 
 from __future__ import annotations
@@ -33,7 +39,9 @@ def gas_plant_cost(gas_eur_mwh, co2_eur_t, efficiency: float = CCGT_EFFICIENCY,
 
     C = p_gas / eta + e * p_CO2 / eta, where p_gas is the gas price (EUR per MWh
     of fuel), p_CO2 the carbon price (EUR/t), eta the plant efficiency and e the
-    CO2 emitted per MWh of gas burnt.
+    CO2 emitted per MWh of gas burnt. With `level_ratio`, it gives a level for a
+    year or two ahead; further ahead, take the level from a scenario's market
+    model instead.
     """
     return gas_eur_mwh / efficiency + co2_eur_t * emission_factor / efficiency
 
@@ -45,7 +53,9 @@ def level_ratio(mean_price: float, gas_eur_mwh: float, co2_eur_t: float, **kw) -
     1.06-1.13 in Poland, where coal sets the price. Multiply the latest ratio by
     a target year's cost to get its level -- and err low: the ratio drifts down
     as solar and nuclear grow, and an overestimated level costs a design far
-    more than an underestimated one.
+    more than an underestimated one. A near-term tool: after 2030, as gas sets
+    the price in fewer hours, such a level overshoots TYNDP 2026's market-model
+    prices by a quarter to almost four times.
     """
     return float(mean_price) / float(gas_plant_cost(gas_eur_mwh, co2_eur_t, **kw))
 
@@ -84,8 +94,8 @@ def share_beyond_training(drivers: DriverInput, training_drivers: DriverInput) -
 
     The model is linear in its drivers, so there it keeps lowering the midday
     price where a real market stops at the price at which renewables curtail.
-    Under about one percent the year can be used as is; at several percent,
-    floor it.
+    While this share and the share of hours left on the floor stay at a few
+    percent, use the year; past that, use the scenario's own hourly prices.
     """
     lowest = float(net_load(training_drivers).min())
     return 100.0 * float((net_load(drivers) < lowest).mean())

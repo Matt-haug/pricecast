@@ -71,12 +71,20 @@ spread and the heat-weighted price over the mean.
 
 ## A future year
 
-See [the recipe](recipe.md) and `examples/02_future_year.py`.
+The scenario sets the drivers and the level; the model sets the shape. Belgium
+in 2030, with TYNDP 2026's fleet, demand and load-weighted mean price (see
+[the recipe](recipe.md) and `examples/02_future_year.py`):
 
 ```python
-future = pricecast.scale_drivers(drivers_2025, solar=1.39, wind=1.38, load=1.30)
-k = pricecast.level_ratio(prices_2025.mean(), gas_eur_mwh=36.1, co2_eur_t=73.4)
-level = k * pricecast.gas_plant_cost(34.6, 97.5)
-year = pricecast.rescale_to_level(model.predict(future), level)
+future = pricecast.scale_drivers(drivers_2025, solar=1.40, wind=1.38, load=1.38)
+floor = pricecast.training_floor(training_prices)
+year = pricecast.rescale_to_level(model.predict(future), level=65.1, floor=floor,
+                                  weights=future["load"])
 print(pricecast.share_beyond_training(future, training_drivers))
 ```
+
+## Sweeps and uncertainty
+
+Each year takes a fraction of a second, so a scenario's inputs can be swept one
+at a time or sampled together, one price year per sample. See
+[Sweeps and uncertainty](uncertainty.md) and `examples/03_uncertainty.py`.
