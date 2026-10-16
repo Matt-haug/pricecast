@@ -139,8 +139,10 @@ Two cautions apply.
   produce scarcity prices lifts every ordinary hour instead. With the hourly
   results at hand, take each weather scenario's load-weighted mean over its
   ordinary hours and weight the scenarios by TYNDP's probabilities.
-- **Err low.** An overestimated level makes flexibility look more valuable than
-  it is, and it costs a design more than an underestimate of the same size.
+- **If unsure, choose the low end of the range.** Rescaling multiplies every
+  hour, so a level set too high also widens the gap between cheap and dear
+  hours. Flexibility then looks more valuable than it is, and the design costs
+  more than one sized on a level set too low by the same amount.
 
 ### 6. Check how far the model reaches
 

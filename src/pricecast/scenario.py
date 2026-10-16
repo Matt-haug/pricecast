@@ -10,7 +10,7 @@ The recipe (see docs/recipe.md):
 4. run the model;
 5. floor the year at the training prices' low quantile (`training_floor`) and
    rescale it to the scenario's load-weighted mean price (`rescale_to_level`),
-   erring low;
+   taking the low end of the scenario's range when unsure;
 6. check how far the model reaches (`share_beyond_training`, and the share of
    hours left on the floor).
 
@@ -51,9 +51,10 @@ def level_ratio(mean_price: float, gas_eur_mwh: float, co2_eur_t: float, **kw) -
 
     In 2023-25 this was 0.66-0.96 in Belgium, Germany, France and Spain and
     1.06-1.13 in Poland, where coal sets the price. Multiply the latest ratio by
-    a target year's cost to get its level -- and err low: the ratio drifts down
-    as solar and nuclear grow, and an overestimated level costs a design far
-    more than an underestimated one. A near-term tool: after 2030, as gas sets
+    a target year's cost to get its level, and when unsure take a lower ratio
+    rather than a higher one: the ratio drifts down as solar and nuclear grow,
+    and a level set too high costs a design far more than one set too low by
+    the same amount. A near-term tool: after 2030, as gas sets
     the price in fewer hours, such a level overshoots TYNDP 2026's market-model
     prices by a quarter to almost four times.
     """

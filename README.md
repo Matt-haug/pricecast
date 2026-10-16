@@ -164,9 +164,12 @@ shows how, and what to check before reading the result.
   that restores price spikes and negative hours, but in hours that do not line
   up with the real ones. Use it for revenue and risk estimates, not to size
   equipment.
-- **Take the level from the scenario, and when unsure, err low.** Match it as a
-  load-weighted mean (`weights=`), as TYNDP reports it. A design sized on too
-  high a level overvalues flexibility.
+- **Take the level from the scenario; if unsure, choose the low end of your
+  range.** Match it as a load-weighted mean (`weights=`), as TYNDP reports it.
+  Rescaling multiplies every hour, so a level set too high also widens the gap
+  between cheap and dear hours: flexibility looks more valuable than it is, and
+  the design costs more than one sized on a level set too low by the same
+  amount.
 - **Watch the reach.** The model is linear in its drivers. Count the hours
   beyond its training net load (`share_beyond_training`) and the hours left on
   the floor after rescaling. While both stay at a few percent, use the year;
