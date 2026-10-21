@@ -3,6 +3,17 @@
 Notable changes to `pricecast`. This project follows
 [semantic versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+- The README and the documentation's home page point to the sister project
+  `loadcast`, by the same authors, for hourly industrial heat, cold and
+  electricity demand.
+
+### Fixed
+- The documentation build pins `pymdown-extensions` below 11: with 12.x,
+  mkdocstrings fails on every page that renders a docstring.
+
 ## [0.1.5] - 2026-10-16
 
 ### Changed

@@ -32,3 +32,9 @@ pip install "pricecast[entsoe]"    # to download market data from ENTSO-E
   scenarios, and which inputs matter.
 - [Mathematics](mathematics.md): the model, the residual process, the level,
   the floor and the reach, with every symbol defined.
+
+Does your study need hourly energy demand as well as prices? Its sister
+project, [`loadcast`](https://loadcast.readthedocs.io/en/latest/), by the same
+authors, turns a few numbers from an industrial site's energy bill into a year
+of hourly heat, cold and electricity demand, with the coupling between the
+carriers as an input.

@@ -200,6 +200,15 @@ downloaded with your own token. The scenario figures quoted in the examples come
 from the [TYNDP 2026 scenarios](https://2026.entsos-tyndp-scenarios.eu/) of
 ENTSO-E and ENTSOG.
 
+## Sister project
+
+Does your study need hourly energy demand as well as prices?
+[`loadcast`](https://loadcast.readthedocs.io/en/latest/), by the same authors,
+turns a few numbers from an industrial site's energy bill into a year of hourly
+heat, cold and electricity demand, with the coupling between the carriers as an
+input. It follows the same idea: a few stated inputs give a year of hourly data,
+fast enough to sweep and to sample.
+
 ## Citing
 
 Use the "Cite this repository" button or [`CITATION.cff`](CITATION.cff). Every
