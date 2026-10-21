@@ -1,5 +1,11 @@
 # Mathematics
 
+Nothing on this page is new time-series theory. The model is a regression of
+the price on calendar terms and on external drivers, and its noise a moving
+average of independent draws; Box et al. (2015) treat both. What `pricecast`
+adds is the choice of drivers and terms that makes a generated year respond to
+a scenario's demand and fleet as real prices have.
+
 ## The model
 
 One ordinary least-squares regression on hourly day-ahead price:
@@ -109,3 +115,8 @@ be used; past that, the scenario's own hourly prices are the better input.
 | $s$, $\pi_s$, $\mathcal O_s$ | weather scenario, its probability, its ordinary hours | - |
 | $\rho^{\mathrm{net}}$, $\rho^{\mathrm{fl}}$ | shares of hours beyond the training net load and on the floor | % |
 | $T$, $\mathcal F$ | number of hours of the year, hours the model was fitted on | - |
+
+## Reference
+
+Box GEP, Jenkins GM, Reinsel GC, Ljung GM. *Time Series Analysis: Forecasting
+and Control*, 5th edition. Wiley, Hoboken, NJ, 2015. ISBN 978-1-118-67502-1.

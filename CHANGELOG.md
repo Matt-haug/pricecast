@@ -6,6 +6,9 @@ Notable changes to `pricecast`. This project follows
 ## [Unreleased]
 
 ### Added
+- The mathematics page credits the time-series theory it builds on (Box,
+  Jenkins, Reinsel and Ljung, *Time Series Analysis*): the package adds no new
+  theory, only a way of combining it to produce the signals a user asks for.
 - The README and the documentation's home page point to the sister project
   `loadcast`, by the same authors, for hourly industrial heat, cold and
   electricity demand.
