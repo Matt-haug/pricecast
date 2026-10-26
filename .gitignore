@@ -10,3 +10,6 @@ htmlcov/
 venv/
 site/
 .DS_Store
+
+# downloaded market years, for rebuilding the documentation figures
+examples/.cache/

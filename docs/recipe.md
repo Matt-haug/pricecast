@@ -131,6 +131,15 @@ year = pricecast.rescale_to_level(model.predict(future), level=tyndp_level,
 ```
 
 The scale is chosen so that the year *after* clipping has the scenario's mean.
+
+![Every hour of Belgium's 2030 year, dearest first, as the model gives it and after rescaling to TYNDP's level with the floor](assets/figures/recipe_floor_level.png)
+
+*The scenario, not the model, sets the level: TYNDP's 65.1 EUR/MWh scales the
+model's 2030 year by 0.54, and no hour reaches the floor. The model's own year
+is dear because demand grows by 38 % while its coefficients keep the market of
+2024-2025. Every hour of 2030, dearest first, before and after
+`rescale_to_level`, from `examples/02_future_year.py`.*
+
 Two cautions apply.
 
 - **Scarcity hours lift the mean.** TYNDP's KPI mean includes them: Belgium's
@@ -144,6 +153,18 @@ Two cautions apply.
   hours. Flexibility then looks more valuable than it is, and the design costs
   more than one sized on a level set too low by the same amount.
 
+![The average day of summer and of winter, as a share of the year's mean: the 2025 market, the model on 2025's drivers, and the model on 2030's](assets/figures/recipe_2030.png)
+
+*In 2030 Belgium's demand grows as fast as its solar fleet, so the summer
+midday trough gets shallower, not deeper. The average day of each half-year, as
+a share of the year's mean: the 2025 market, the model on 2025's drivers, and
+the finished 2030 year, built on 2025's weather with solar x1.40, wind x1.38
+and demand x1.38. Over the year the midday price rises from 0.59 to 0.69 of the
+mean. The thin lines mark each series' mean over the six months, against the
+year's at 1: summer prices sit at 0.84 of the year's mean and winter prices at
+1.16, in the 2025 market as in 2030, so the seasons keep their weight while the
+summer trough fills in.*
+
 ### 6. Check how far the model reaches
 
 The model is linear in its drivers. Where solar or wind roughly doubles, many
@@ -155,6 +176,14 @@ market stops. Two counts measure how far a year has gone:
 beyond = pricecast.share_beyond_training(future, training_drivers)  # % of hours
 on_floor = 100.0 * float((year <= floor + 1e-9).mean())            # % of hours
 ```
+
+![Net load for every hour of 2024-25 and of 2030, highest first, with the lowest net load of the training years](assets/figures/recipe_reach.png)
+
+*Belgium's 2030 stays within the model's reach: none of its hours has a net load
+below the lowest of the training years, and none sits on the floor. Net load,
+load minus solar minus wind, for every hour of 2024-2025 and of 2030, highest
+first: the higher demand keeps 2030 above the training years almost to the
+last hour.*
 
 where `training_drivers` are the drivers the model was fitted on - the market
 years', or TYNDP's own. While both stay at a few percent, use the year; past
@@ -191,3 +220,10 @@ at the same local hour (`pricecast.lay_on_calendar`). For Central European
 markets a calendar year opens at 23:00 UTC on 31 December. Laid on an index
 that starts at 00:00 UTC, every reused hour lands one hour late, which is
 enough to misplace every daily peak and trough a storage model trades on.
+
+![The average day of 2025's prices reused for 2026, laid on the market year and laid an hour late](assets/figures/recipe_calendar.png)
+
+*Laid an hour late, every peak and trough of the average day moves an hour
+later. Belgium's 2025 prices laid on 2026 with `lay_on_calendar`: on an index
+that opens at 23:00 UTC on 31 December, as the market year does, and on one
+that opens at 00:00 UTC.*

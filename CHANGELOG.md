@@ -6,6 +6,18 @@ Notable changes to `pricecast`. This project follows
 ## [Unreleased]
 
 ### Added
+- The documentation shows what the model does in ten figures: on the home
+  page, the drivers and prices of 2025's median week, then its best and worst
+  weeks with their drivers; the conditional mean, the noise and the year's
+  structure on the usage page; a 2030 year from TYNDP, its level, its reach
+  and a reused past year in the recipe; a solar sweep and 32 sampled years on
+  the page on uncertainty. Each caption opens with the figure's message.
+  `examples/build_doc_figures.py` draws them from ENTSO-E's Belgian market
+  years, in the house style of `examples/figure_style.py`, which the sister
+  package `loadcast` shares: after Jean-luc Doumont's *Trees, maps, and
+  theorems*, lines named on the plot, axes apart from the data, solid lines
+  told apart by colour, and Manrope when it is installed or its files sit in
+  the folder `PRICECAST_FIGURE_FONTS` names.
 - The mathematics page credits the time-series theory it builds on (Box,
   Jenkins, Reinsel and Ljung, *Time Series Analysis*): the package adds no new
   theory, only a way of combining it to produce the signals a user asks for.

@@ -57,6 +57,15 @@ year = model.predict(drivers)                       # the conditional mean
 noisy = model.predict(drivers, noise=True, seed=1)  # with the residual process
 ```
 
+![The median week of the home page: the market's price against the conditional mean, and against the mean with the residual process](assets/figures/usage_generate.png)
+
+*The conditional mean follows the market's daily rhythm but not its extreme
+hours; the noise restores the spread, in hours of its own. The median week of
+the home page, from the model fitted on 2023 and 2024. Over 2025 the noise lifts the
+share of negative hours from 2.3 % to 5.2 % (market 5.9 %) and the daily
+four-hour spread from 76 to 90 EUR/MWh (market 91), but its dips and spikes
+fall in other hours than the market's.*
+
 ## Check the structure
 
 ```python
@@ -68,6 +77,15 @@ pricecast.compare({"actual": prices_2025, "model": year}, truth="actual",
 Reports the mean, the share of negative hours, the midday price over the mean,
 the evening-minus-midday price, the solar value factor, the daily four-hour
 spread and the heat-weighted price over the mean.
+
+![The average day of 2025 and every hour of 2025 sorted from dearest to cheapest, market against model](assets/figures/usage_structure.png)
+
+*The model keeps the shape of 2025's average day; what it misses are the
+market's extreme hours. Left: the average day, whose morning and evening peaks
+and midday trough the model places at the right hours. Right: every hour of the
+year, dearest first. The market's few hours above 200 EUR/MWh and its plunge to
+-462 EUR/MWh have no counterpart in the model, which is a conditional mean. The
+model was fitted on 2023 and 2024.*
 
 ## A future year
 

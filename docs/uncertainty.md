@@ -35,6 +35,15 @@ Holding the level fixed isolates the shape. Read every row with its reach count:
 as solar grows, a rising share of hours lies beyond the training net load, where
 the model extrapolates its trough linearly and the floor then stops it.
 
+![The average day for Belgium's solar fleet at one to three times 2025's, and the midday price and reach counts against the fleet](assets/figures/uncertainty_solar.png)
+
+*More solar deepens the midday trough, by less at each step, and pushes ever
+more hours beyond the model's reach: one in eight at twice today's fleet. The
+code above, on 2025's weather and level with the shipped model. Right: the
+midday price over the mean, which falls from 0.60 to 0.16, and the two reach
+counts, the hours whose net load lies below anything in the training years and
+the hours on the floor.*
+
 ## Sampling a scenario's uncertain inputs
 
 A scenario gives a range for each input, and sampling those ranges gives one
@@ -77,6 +86,15 @@ independently, the inputs ignore that a higher-growth world has both more demand
 and dearer power; sample them jointly where the scenario says how they move
 together. And keep the two reach counts of each sample (recipe, step 6): a
 sample beyond the model's reach is the model failing, not a finding.
+
+![The average day of each of 32 price years sampled for Belgium in 2035, and the spread of three of their features](assets/figures/uncertainty_samples.png)
+
+*Across the 32 sampled years, the level moves the whole day up and down, while
+the midday price ranges from 0.44 to 0.78 of the mean. Left: the average day of
+each year, and their median. Right: three features of each year, with lines at
+the 5th percentile, the median and the 95th; in 95 % of the samples at most 8 %
+of the hours lie beyond the model's reach. The samples of
+`examples/03_uncertainty.py`.*
 
 ## Which inputs matter
 
