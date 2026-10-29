@@ -55,6 +55,9 @@
   "source": "ENTSO-E Transparency Platform: day-ahead prices, actual total load, actual generation per production type (solar; wind onshore + offshore), hourly means",
   "fitted": "2026-10-09",
   "pricecast_version": "0.1.0",
-  "r2_in_sample": 0.645
+  "r2_in_sample": 0.645,
+  "floor_eur_mwh": -21.417,
+  "floor_share_pct": 1.0,
+  "lowest_net_load_mw": 593.3
  }
 }

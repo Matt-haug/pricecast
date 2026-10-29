@@ -1,0 +1,89 @@
+{
+ "coefficients": {
+  "const": 31.854953479668396,
+  "hour_1": 0.8443831792874807,
+  "hour_2": 0.25860784389323643,
+  "hour_3": -3.397093626589399,
+  "hour_4": -11.016033864691558,
+  "hour_5": -16.68943494816081,
+  "hour_6": -8.161566127249902,
+  "hour_7": 4.498801425782962,
+  "hour_8": 15.100600315012283,
+  "hour_9": 20.08343089879256,
+  "hour_10": 28.700743635236332,
+  "hour_11": 36.07865664532163,
+  "hour_12": 39.22131433540414,
+  "hour_13": 36.73551298570155,
+  "hour_14": 30.117944823197323,
+  "hour_15": 21.1340118538872,
+  "hour_16": 11.886567659539775,
+  "hour_17": -3.732240523882699,
+  "hour_18": -17.082827201603706,
+  "hour_19": -18.62204458113043,
+  "hour_20": -11.020791462224842,
+  "hour_21": -5.588134957887436,
+  "hour_22": -2.280349871384083,
+  "hour_23": -1.353310159397131,
+  "dow_0": -3.413672977415611,
+  "dow_1": -4.662228674104635,
+  "dow_2": -3.537589585286865,
+  "dow_3": -4.2996775879164835,
+  "dow_4": -5.872923376019919,
+  "dow_5": -3.248516764675222,
+  "load": 0.0019385161575049476,
+  "solar": -0.0018123830511789527,
+  "wind": -0.0012226645459715883,
+  "net_load_sq": 3.772266020087248e-08
+ },
+ "residual_std": 33.17118794175673,
+ "student_df": 4.208971396605022,
+ "features": {
+  "hour_dummies": true,
+  "weekday_dummies": true,
+  "net_load_curvature": true,
+  "driver_lags": [],
+  "timezone": "UTC"
+ },
+ "metadata": {
+  "country": "ES",
+  "scenario": "TYNDP 2026 NT+",
+  "target_year": 2040,
+  "weather_scenarios": {
+   "WS077": 0.4,
+   "WS071": 0.4,
+   "WS065": 0.2
+  },
+  "hours": 26276,
+  "scarcity_hours_left_out": 4,
+  "scarcity_threshold_eur_mwh": 1000.0,
+  "source": "ENTSO-E TYNDP 2026 hourly dashboards: price = marginal costs of the E-Market and Prosumer nodes weighted by their total load; load = native and fixed demand plus net electric-vehicle charging; solar (utility, rooftop, shared plant) and wind (onshore, offshore) with curtailment added back; CET hours laid on a 2029 calendar, UTC index",
+  "level_eur_mwh": 52.822,
+  "kpi_level_eur_mwh": 48.325,
+  "kpi_price_q10_eur_mwh": 0.0,
+  "kpi_price_q90_eur_mwh": 125.692,
+  "floor_eur_mwh": 0.0,
+  "floor_share_pct": 18.91,
+  "lowest_net_load_mw": -119130.1,
+  "drivers": {
+   "solar_gw": 83.0,
+   "wind_gw": 91.8,
+   "demand_twh": 379.496
+  },
+  "note": "solar_gw leaves out rooftop PV (TYNDP's PEMMDB inputs), because ENTSO-E's Spanish solar series leaves out self-consumption",
+  "variants": {
+   "LEV": {
+    "demand_twh": 345.799,
+    "kpi_level_eur_mwh": 22.767,
+    "level_eur_mwh": 24.885
+   },
+   "HEV": {
+    "demand_twh": 415.347,
+    "kpi_level_eur_mwh": 88.014,
+    "level_eur_mwh": 96.204
+   }
+  },
+  "r2_in_sample": 0.589,
+  "fitted": "2026-10-29",
+  "pricecast_version": "0.1.5"
+ }
+}

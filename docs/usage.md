@@ -48,7 +48,21 @@ model.to_json("be_2024_2025.json")
 
 model = pricecast.load("BE")          # shipped: BE, DE, FR, ES, PL, fitted on 2024-25
 pricecast.available()
+
+# fitted on TYNDP 2026's hourly results for one target year: 2030, 2035, 2040, 2050
+model = pricecast.load("BE", scenario="TYNDP2026", year=2040)
+pricecast.available("TYNDP2026")      # (country, year) pairs
 ```
+
+Every shipped model records in its `metadata` what the recipe needs without
+its training data: the floor (`floor_eur_mwh`, the 1% quantile of the prices
+fitted on), the share of training hours at or below it (`floor_share_pct`) and
+the lowest net load fitted on (`lowest_net_load_mw`, for
+`share_beyond_training`). A TYNDP model adds the scenario's solar and wind
+fleet and annual demand (`drivers`), its load-weighted level over ordinary
+hours (`level_eur_mwh`), the KPI dashboard's level and quantiles, and for 2035
+and 2040 the demand and level of the lower- and higher-growth variants
+(`variants`). See the [recipe](recipe.md) for how each is used.
 
 ## Generate
 

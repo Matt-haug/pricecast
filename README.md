@@ -92,6 +92,15 @@ model = pricecast.load("BE")               # a shipped model: BE, DE, FR, ES, PL
 year = model.predict(drivers)              # an hourly price year, EUR/MWh
 ```
 
+For a future year, start from the model fitted on TYNDP 2026's hourly results
+for that year (2030, 2035, 2040 or 2050); its metadata holds the scenario's
+fleet, demand, level and floor:
+
+```python
+model = pricecast.load("BE", scenario="TYNDP2026", year=2040)
+model.metadata["drivers"], model.metadata["level_eur_mwh"]
+```
+
 Or fit your own, on any market with hourly prices and drivers:
 
 ```python
@@ -189,14 +198,18 @@ shows how, and what to check before reading the result.
   one driver at a time, sampled scenarios, and sensitivity indices.
 - [Mathematics](https://pricecast.readthedocs.io/en/latest/mathematics/): the
   model, the residual process, the level, the floor and the reach.
-- [`examples/`](examples/): a quick start, a future year and a sampled scenario.
+- [`examples/`](examples/): a quick start, a future year, a sampled scenario and
+  a future year from a shipped TYNDP model.
 
 ## Data
 
-The shipped models are fitted on ENTSO-E Transparency Platform data for
+The shipped market models are fitted on ENTSO-E Transparency Platform data for
 2024-2025: day-ahead prices, actual total load and actual generation per
-production type. Only the fitted coefficients ship; the raw series are
-downloaded with your own token. The scenario figures quoted in the examples come
+production type. The shipped scenario models are fitted on the hourly results of
+ENTSO-E's TYNDP 2026 (central scenario National Trends+, three weather
+scenarios per target year, scarcity hours left out), for 2030, 2035, 2040 and
+2050. Only the fitted coefficients and the figures the recipe needs ship; the
+raw series are downloaded with your own token. The scenario figures quoted in the examples come
 from the [TYNDP 2026 scenarios](https://2026.entsos-tyndp-scenarios.eu/) of
 ENTSO-E and ENTSOG.
 

@@ -6,6 +6,24 @@ Notable changes to `pricecast`. This project follows
 ## [Unreleased]
 
 ### Added
+- Models fitted on ENTSO-E's TYNDP 2026 hourly results ship beside the market
+  models: one per market (BE, DE, ES, FR, PL) and target year (2030, 2035,
+  2040, 2050), fitted on the central scenario (National Trends+) under its
+  three representative weather scenarios, with scarcity hours above
+  1000 EUR/MWh left out. `pricecast.load("BE", scenario="TYNDP2026",
+  year=2040)` opens one and `pricecast.available("TYNDP2026")` lists them.
+  Their metadata carries what the recipe needs without TYNDP's data: the
+  scenario's solar and wind fleet and annual demand, its load-weighted level
+  over ordinary hours, the KPI dashboard's level and quantiles, and, for 2035
+  and 2040, the demand and level of the lower- and higher-growth variants.
+  `examples/04_tyndp_model.py` builds Belgium's 2040 year with one.
+- Every shipped model, market or scenario, records its floor (`floor_eur_mwh`,
+  the 1% quantile of the prices fitted on), the share of training hours at or
+  below it (`floor_share_pct`) and the lowest net load fitted on
+  (`lowest_net_load_mw`).
+- `share_beyond_training` accepts that lowest net load in place of the
+  training drivers, so the reach of a shipped model can be counted without its
+  training data.
 - The documentation shows what the model does in ten figures: on the home
   page, the drivers and prices of 2025's median week, then its best and worst
   weeks with their drivers; the conditional mean, the noise and the year's
@@ -28,6 +46,13 @@ Notable changes to `pricecast`. This project follows
 ### Fixed
 - The documentation build pins `pymdown-extensions` below 11: with 12.x,
   mkdocstrings fails on every page that renders a docstring.
+- The recipe quoted a test of the TYNDP-fitted model from the accompanying
+  study whose fit, outside this package, had paired each hour's prices from
+  TYNDP's three weather scenarios with the drivers of one of them. It now
+  quotes the corrected test: hourly correlation 0.66-0.91 on a weather scenario
+  left out of the fit, average day 0.97-1.00, and a daily spread up to 1.8
+  times TYNDP's in 2040 and 2050. `pricecast.fit`, which builds each series'
+  rows on its own index, was not affected.
 
 ## [0.1.5] - 2026-10-16
 

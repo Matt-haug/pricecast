@@ -34,12 +34,29 @@ cannot see. In the five markets of the accompanying study, the model fitted on
 2024-2025 and driven by TYNDP's own hourly drivers placed the average day's
 peaks and troughs well but overstated TYNDP's daily spread 1.5 to 4.5 times.
 Fitted instead on two of TYNDP's three weather scenarios for a target year and
-tested on the third, it reproduced TYNDP's average day (correlation 0.98-1.00)
-and its hourly prices with a correlation of 0.62-0.88. Its tails stay too
-narrow: the model is a conditional mean, so its 10% quantile sits too high and
-its 90% quantile 10-45 EUR/MWh too low.
+tested on the third, it reproduced TYNDP's average day (correlation 0.97-1.00)
+and its hourly prices with a correlation of 0.66-0.91. Its daily spread was 1.0
+to 1.2 times TYNDP's in 2030 and 2035, but up to 1.8 times in 2040 and 2050,
+and its tails stay too narrow: the model is a conditional mean, so its 10%
+quantile sits up to 17 EUR/MWh too high and its 90% quantile up to 31 EUR/MWh
+too low.
 
-TYNDP publishes these results as
+`pricecast` ships these models for the five markets and TYNDP's four target
+years, fitted as below on its central scenario. Each carries in its metadata the
+scenario's figures that the later steps need, so TYNDP's hourly data is needed
+only to fit another country or scenario. `examples/04_tyndp_model.py` runs the
+whole recipe with one:
+
+```python
+model = pricecast.load("BE", scenario="TYNDP2026", year=2040)
+target = model.metadata
+target["drivers"]              # solar_gw, wind_gw, demand_twh: for step 3
+target["level_eur_mwh"]        # TYNDP's level over its ordinary hours: for step 5
+target["floor_eur_mwh"]        # the 1% quantile of the hours fitted on: for step 5
+target["lowest_net_load_mw"]   # for step 6
+```
+
+To fit one yourself, TYNDP publishes its results as
 [hourly dashboards](https://2026-data.entsos-tyndp-scenarios.eu/output/model-results/hourly-dashboards/NT+_TimeSeriesDashboard.zip),
 one archive per scenario (about 1.8 GB for NT+), with one workbook per country
 and weather scenario. Build the three drivers and the price as TYNDP defines
@@ -186,7 +203,11 @@ first: the higher demand keeps 2030 above the training years almost to the
 last hour.*
 
 where `training_drivers` are the drivers the model was fitted on - the market
-years', or TYNDP's own. While both stay at a few percent, use the year; past
+years', or TYNDP's own - or, for a shipped model, the lowest net load among
+them, `model.metadata["lowest_net_load_mw"]`. Judge the hours on the floor
+against the share of training hours already there (`floor_share_pct`): 1% for
+market years, by construction of the quantile, but more for TYNDP, which clears
+many ordinary hours at exactly its floor. While both stay at a few percent, use the year; past
 that, use the scenario's own hourly prices. A model fitted on market years also
 holds storage and demand response at their training level, so read its future
 spreads as upper bounds; fitted on the scenario's hourly results, it carries

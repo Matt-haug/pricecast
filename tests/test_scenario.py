@@ -51,6 +51,14 @@ def test_share_beyond_training_grows_with_solar(synthetic_market):
     assert pricecast.share_beyond_training(more, drivers) > 1.0
 
 
+def test_share_beyond_training_takes_the_lowest_net_load(synthetic_market):
+    _, drivers, _ = synthetic_market
+    more = pricecast.scale_drivers(drivers, solar=3.0)
+    lowest = float(pricecast.net_load(drivers).min())
+    assert (pricecast.share_beyond_training(more, lowest)
+            == pricecast.share_beyond_training(more, drivers))
+
+
 def test_training_floor_is_the_low_quantile():
     s = pd.Series(np.arange(101.0), index=pd.date_range("2025-01-01", periods=101,
                                                          freq="h", tz="UTC"))

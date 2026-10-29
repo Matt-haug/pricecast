@@ -64,7 +64,7 @@ Issues = "https://github.com/Matt-haug/pricecast/issues"
 where = ["src"]
 
 [tool.setuptools.package-data]
-pricecast = ["data/*.json"]
+pricecast = ["data/*.json", "data/*/*.json"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

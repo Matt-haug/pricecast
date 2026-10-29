@@ -1,0 +1,88 @@
+{
+ "coefficients": {
+  "const": -16.714843024650264,
+  "hour_1": 1.2440734675397875,
+  "hour_2": 1.3030004827781498,
+  "hour_3": -1.4899033684959606,
+  "hour_4": -15.324886568333426,
+  "hour_5": -30.43342534102337,
+  "hour_6": -42.38786323739776,
+  "hour_7": -49.63436551336717,
+  "hour_8": -46.810961348545526,
+  "hour_9": -42.23005265298656,
+  "hour_10": -42.2402857716569,
+  "hour_11": -42.93906877446127,
+  "hour_12": -45.80908887118137,
+  "hour_13": -49.12831127880425,
+  "hour_14": -48.97250268808771,
+  "hour_15": -50.58624633516372,
+  "hour_16": -57.21691795189529,
+  "hour_17": -61.91424420348156,
+  "hour_18": -59.02530997750752,
+  "hour_19": -46.58728285562511,
+  "hour_20": -30.05411320239758,
+  "hour_21": -16.21896641333957,
+  "hour_22": -6.57886967564796,
+  "hour_23": -3.6541538735945527,
+  "dow_0": -19.15371045751754,
+  "dow_1": -20.63277431044583,
+  "dow_2": -20.784093401319293,
+  "dow_3": -19.355645892695698,
+  "dow_4": -21.956903111567424,
+  "dow_5": -12.074171966176912,
+  "load": 0.00987613624418531,
+  "solar": -0.0038593309347989577,
+  "wind": -0.004034538777226888,
+  "net_load_sq": 1.6467563015985504e-07
+ },
+ "residual_std": 26.385457332091164,
+ "student_df": 6.911745539146036,
+ "features": {
+  "hour_dummies": true,
+  "weekday_dummies": true,
+  "net_load_curvature": true,
+  "driver_lags": [],
+  "timezone": "UTC"
+ },
+ "metadata": {
+  "country": "PL",
+  "scenario": "TYNDP 2026 NT+",
+  "target_year": 2035,
+  "weather_scenarios": {
+   "WS037": 0.43,
+   "WS059": 0.33,
+   "WS032": 0.24
+  },
+  "hours": 26220,
+  "scarcity_hours_left_out": 60,
+  "scarcity_threshold_eur_mwh": 1000.0,
+  "source": "ENTSO-E TYNDP 2026 hourly dashboards: price = marginal costs of the E-Market and Prosumer nodes weighted by their total load; load = native and fixed demand plus net electric-vehicle charging; solar (utility, rooftop, shared plant) and wind (onshore, offshore) with curtailment added back; CET hours laid on a 2029 calendar, UTC index",
+  "level_eur_mwh": 70.821,
+  "kpi_level_eur_mwh": 77.477,
+  "kpi_price_q10_eur_mwh": 0.0,
+  "kpi_price_q90_eur_mwh": 143.246,
+  "floor_eur_mwh": 0.0,
+  "floor_share_pct": 10.36,
+  "lowest_net_load_mw": -40316.0,
+  "drivers": {
+   "solar_gw": 37.901,
+   "wind_gw": 35.275,
+   "demand_twh": 175.861
+  },
+  "variants": {
+   "LEV": {
+    "demand_twh": 163.281,
+    "kpi_level_eur_mwh": 47.275,
+    "level_eur_mwh": 43.214
+   },
+   "HEV": {
+    "demand_twh": 189.96,
+    "kpi_level_eur_mwh": 113.881,
+    "level_eur_mwh": 104.098
+   }
+  },
+  "r2_in_sample": 0.816,
+  "fitted": "2026-10-29",
+  "pricecast_version": "0.1.5"
+ }
+}

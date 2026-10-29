@@ -3,7 +3,8 @@
 The recipe (see docs/recipe.md):
 
 1. fit on the two most recent complete years, or on the scenario's own hourly
-   results where it publishes them (TYNDP 2026 does);
+   results where it publishes them (TYNDP 2026 does), or start from a shipped
+   model of either kind (`load`);
 2. take every weather-dependent input from one weather year;
 3. scale that year's drivers to the target year's fleet and demand
    (`scale_drivers`, `mid_year_capacity`);
@@ -90,15 +91,22 @@ def net_load(drivers: DriverInput) -> pd.Series:
             - as_utc(pd.Series(drivers["wind"])))
 
 
-def share_beyond_training(drivers: DriverInput, training_drivers: DriverInput) -> float:
+def share_beyond_training(drivers: DriverInput,
+                          training_drivers: DriverInput | float) -> float:
     """Percent of hours whose net load is lower than any the model was fitted on.
 
     The model is linear in its drivers, so there it keeps lowering the midday
     price where a real market stops at the price at which renewables curtail.
     While this share and the share of hours left on the floor stay at a few
     percent, use the year; past that, use the scenario's own hourly prices.
+    `training_drivers` is the drivers fitted on, or the lowest net load among
+    them (MW), which a shipped model records as
+    `model.metadata["lowest_net_load_mw"]`.
     """
-    lowest = float(net_load(training_drivers).min())
+    if isinstance(training_drivers, (int, float)):
+        lowest = float(training_drivers)
+    else:
+        lowest = float(net_load(training_drivers).min())
     return 100.0 * float((net_load(drivers) < lowest).mean())
 
 
