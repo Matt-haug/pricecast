@@ -5,6 +5,8 @@ Notable changes to `pricecast`. This project follows
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-10-29
+
 ### Added
 - Models fitted on ENTSO-E's TYNDP 2026 hourly results ship beside the market
   models: one per market (BE, DE, ES, FR, PL) and target year (2030, 2035,
